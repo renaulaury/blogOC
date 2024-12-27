@@ -4,13 +4,13 @@ function getPosts()
 {
     $database = dbConnect();
     $statement = $database->query(
-        "SELECT id, title, content, DATE_FORMAT(creation_date, '%d/%m/%Y à %Hh%imin%ss') AS french_creation_date FROM posts ORDER BY creation_date DESC LIMIT 0, 5"
+        "SELECT id, title, content, DATE_FORMAT(creationDate, '%d/%m/%Y à %Hh%imin%ss') AS french_creationDate FROM posts ORDER BY creationDate DESC LIMIT 0, 5"
     );
     $posts = [];
     while (($row = $statement->fetch())) {
         $post = [
             'title' => $row['title'],
-            'french_creation_date' => $row['french_creation_date'],
+            'french_creationDate' => $row['french_creationDate'],
             'content' => $row['content'],
             'identifier' => $row['id'],
         ];
@@ -25,14 +25,14 @@ function getPost($identifier)
 {
     $database = dbConnect();
     $statement = $database->prepare(
-        "SELECT id, title, content, DATE_FORMAT(creation_date, '%d/%m/%Y à %Hh%imin%ss') AS french_creation_date FROM posts WHERE id = ?"
+        "SELECT id, title, content, DATE_FORMAT(creationDate, '%d/%m/%Y à %Hh%imin%ss') AS french_creationDate FROM posts WHERE id = ?"
     );
     $statement->execute([$identifier]);
 
     $row = $statement->fetch();
     $post = [
         'title' => $row['title'],
-        'french_creation_date' => $row['french_creation_date'],
+        'french_creationDate' => $row['french_creationDate'],
         'content' => $row['content'],
     ];
 
@@ -43,7 +43,7 @@ function getComments($identifier)
 {
     $database = dbConnect();
     $statement = $database->prepare(
-        "SELECT id, author, comment, DATE_FORMAT(comment_date, '%d/%m/%Y à %Hh%imin%ss') AS french_creation_date FROM comments WHERE post_id = ? ORDER BY comment_date DESC"
+        "SELECT id, author, comment, DATE_FORMAT(comment_date, '%d/%m/%Y à %Hh%imin%ss') AS french_creationDate FROM comments WHERE post_id = ? ORDER BY comment_date DESC"
     );
     $statement->execute([$identifier]);
 
@@ -51,7 +51,7 @@ function getComments($identifier)
     while (($row = $statement->fetch())) {
         $comment = [
             'author' => $row['author'],
-            'french_creation_date' => $row['french_creation_date'],
+            'french_creationDate' => $row['french_creationDate'],
             'comment' => $row['comment'],
         ];
 
@@ -64,7 +64,7 @@ function getComments($identifier)
 function dbConnect()
 {
     try {
-        $database = new PDO('mysql:host=localhost;dbname=blogOC;charset=utf8', 'root', '');
+        $database = new PDO('mysql:host=localhost;dbname=blogoc;charset=utf8', 'root', '');
 
         return $database;
     } catch (Exception $e) {
